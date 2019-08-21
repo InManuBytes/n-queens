@@ -18,6 +18,7 @@
       }
     },
 
+    // returns each row as an array
     rows: function() {
       return _(_.range(this.get('n'))).map(function(rowIndex) {
         return this.get(rowIndex);
@@ -78,12 +79,33 @@
     // --------------------------------------------------------------
     //
     // test if a specific row on this board contains a conflict
+    
+    //specs don't test this function
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      var _currentRow = this.get(rowIndex); //this is an array
+      var _ones = 0;
+      for (let i = 0; i < _currentRow.length; i++) {
+        if (_currentRow[i] === 1) {
+          _ones++;
+        }
+      }
+      if (_ones > 1) {
+        return true
+      } else {
+        return false;
+      }
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
+      // get all rows and loop over with hasRowConflictAt
+      this.rows.forEach((value, rowIndex) => {
+        hasRowConflictAt(rowIndex);
+      }); 
+      // just need to loop through rowIndexes -> n of them
+      for (let i = 0; i < board.attributes.n) {
+        
+      }
       return false; // fixme
     },
 
