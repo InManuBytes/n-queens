@@ -99,14 +99,14 @@
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
       // get all rows and loop over with hasRowConflictAt
-      this.rows.forEach((value, rowIndex) => {
-        hasRowConflictAt(rowIndex);
-      }); 
       // just need to loop through rowIndexes -> n of them
-      for (let i = 0; i < board.attributes.n) {
-        
+      var result = false;
+      for (let i = 0; i < this.attributes.n; i++) {
+        if (this.hasRowConflictAt(i) === true){
+          result = true;
+        }
       }
-      return false; // fixme
+      return result;
     },
 
 
@@ -116,11 +116,42 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+     //holds all our columns
+
+      for (var j = 0; j < size; j++) { //goes through each element in the row
+              //columnsArray[j][i] = this[i][j];
+        column.push(wholeBoard[j][colIndex])
+      }
+      // if (transBoard.hasRowConflictAt(colIndex)) {
+      //   result = true;
+      // }
+      return result; // fixme
     },
+
+    // _transBoard: function () {
+    //   var wholeBoard = this.rows();
+    //   var size = this.attributes.n;
+    //   var columnsArray = []; 
+    //   for (var i = 0; i < size; i++) { //goes through each row
+    //     //var _currentRow = this.get(i);
+    //     var column = [];
+    //     for (var j = 0; j < size; j++) { //goes through each element in the row
+    //       //columnsArray[j][i] = this[i][j];
+    //       column.push(wholeBoard[j][i])
+    //     }
+    //     columsArray.push(column);
+    //   }
+    //     // create column arrays based off index [0], [1]
+    //     // [1,0,1]   [1,1,0]   board[0][0] board[0][1]
+    //   //   [1,1,1] ->[0,1,1]   board[1][0] board[1][1]
+    //     // [0,1,0]   [1,1,0]   board[2][0] board[2][1]
+    //   var transBoard = new Board({n:size},columnsArray);
+    //   return transBoard;
+    // }
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
+
       return false; // fixme
     },
 
