@@ -184,12 +184,50 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      // get the whole board
+      var _wholeBoard = this.rows();
+      var _size = this.attributes.n;
+      var _piecesCount = 0;
+      // a spot with index i,j on the board is referenced by wholeBoard[i][j]
+      var j = majorDiagonalColumnIndexAtFirstRow;
+      // since we're going from top-left to bottom-right we start at row 0
+      // loop through i, j index increasing both by one to check diagonal
+      //
+      // Example:
+      // [0,0,0,0]
+      // [0,0,0,0]
+      // [0,0,0,1]
+      // [0,0,0,0]
+      //
+      // so say we start at j = 1
+      // start at wholeBoard[0][1]
+      // [0,x,0,0]  next  [0,0,0,0]
+      // [0,0,0,0] i=1,j=2[0,0,x,0]
+      // [0,0,0,1]        [0,0,0,1]
+      // [0,0,0,0]        [0,0,0,0]
+
+      for (var i = 0; i < _size; i++, j++) {
+        if (_wholeBoard[i][j] === 1) {
+          _piecesCount++;
+        }
+      }
+      return _piecesCount > 1; // fixme
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      var _size = this.attributes.n;
+      var conflict = false;
+      var transBoard = this._transBoard();
+      for (var i = 0; i < _size; i++) {
+        if (
+          this.hasMajorDiagonalConflictAt(i) ||
+          transBoard.hasMajorDiagonalConflictAt(i)
+        ) {
+          conflict = true;
+        }
+      }
+      return conflict;
     },
 
     // Minor Diagonals - go from top-right to bottom-left
@@ -197,12 +235,25 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      // get the whole board
+      var _wholeBoard = this.rows();
+      var _size = this.attributes.n - 1;
+      var _piecesCount = 0;
+      // a spot with index i,j on the board is referenced by wholeBoard[i][j]
+      var j = minorDiagonalColumnIndexAtFirstRow;
+      for (var i = 0; i < _size; i++, j--) {
+        if (_wholeBoard[i][j] === 1) {
+          _piecesCount++;
+        }
+      }
+      return (_piecesCount > 1);
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var _size = this.attributes.n;
+      var conflict = false;
+      return conflict;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
