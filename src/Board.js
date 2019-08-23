@@ -7,57 +7,57 @@
     initialize: function(params) {
       if (_.isUndefined(params) || _.isNull(params)) {
         console.log(
-          "Good guess! But to use the Board() constructor, you must pass it an argument in one of the following formats:"
+          'Good guess! But to use the Board() constructor, you must pass it an argument in one of the following formats:'
         );
         console.log(
-          "\t1. An object. To create an empty board of size n:\n\t\t{n: %c<num>%c} - Where %c<num> %cis the dimension of the (empty) board you wish to instantiate\n\t\t%cEXAMPLE: var board = new Board({n:5})",
-          "color: blue;",
-          "color: black;",
-          "color: blue;",
-          "color: black;",
-          "color: grey;"
+          '\t1. An object. To create an empty board of size n:\n\t\t{n: %c<num>%c} - Where %c<num> %cis the dimension of the (empty) board you wish to instantiate\n\t\t%cEXAMPLE: var board = new Board({n:5})',
+          'color: blue;',
+          'color: black;',
+          'color: blue;',
+          'color: black;',
+          'color: grey;'
         );
         console.log(
-          "\t2. An array of arrays (a matrix). To create a populated board of size n:\n\t\t[ [%c<val>%c,%c<val>%c,%c<val>%c...], [%c<val>%c,%c<val>%c,%c<val>%c...], [%c<val>%c,%c<val>%c,%c<val>%c...] ] - Where each %c<val>%c is whatever value you want at that location on the board\n\t\t%cEXAMPLE: var board = new Board([[1,0,0],[0,1,0],[0,0,1]])",
-          "color: blue;",
-          "color: black;",
-          "color: blue;",
-          "color: black;",
-          "color: blue;",
-          "color: black;",
-          "color: blue;",
-          "color: black;",
-          "color: blue;",
-          "color: black;",
-          "color: blue;",
-          "color: black;",
-          "color: blue;",
-          "color: black;",
-          "color: blue;",
-          "color: black;",
-          "color: blue;",
-          "color: black;",
-          "color: blue;",
-          "color: black;",
-          "color: grey;"
+          '\t2. An array of arrays (a matrix). To create a populated board of size n:\n\t\t[ [%c<val>%c,%c<val>%c,%c<val>%c...], [%c<val>%c,%c<val>%c,%c<val>%c...], [%c<val>%c,%c<val>%c,%c<val>%c...] ] - Where each %c<val>%c is whatever value you want at that location on the board\n\t\t%cEXAMPLE: var board = new Board([[1,0,0],[0,1,0],[0,0,1]])',
+          'color: blue;',
+          'color: black;',
+          'color: blue;',
+          'color: black;',
+          'color: blue;',
+          'color: black;',
+          'color: blue;',
+          'color: black;',
+          'color: blue;',
+          'color: black;',
+          'color: blue;',
+          'color: black;',
+          'color: blue;',
+          'color: black;',
+          'color: blue;',
+          'color: black;',
+          'color: blue;',
+          'color: black;',
+          'color: blue;',
+          'color: black;',
+          'color: grey;'
         );
-      } else if (params.hasOwnProperty("n")) {
-        this.set(makeEmptyMatrix(this.get("n")));
+      } else if (params.hasOwnProperty('n')) {
+        this.set(makeEmptyMatrix(this.get('n')));
       } else {
-        this.set("n", params.length);
+        this.set('n', params.length);
       }
     },
 
     // returns each row as an array
     rows: function() {
-      return _(_.range(this.get("n"))).map(function(rowIndex) {
+      return _(_.range(this.get('n'))).map(function(rowIndex) {
         return this.get(rowIndex);
       }, this);
     },
 
     togglePiece: function(rowIndex, colIndex) {
       this.get(rowIndex)[colIndex] = +!this.get(rowIndex)[colIndex];
-      this.trigger("change");
+      this.trigger('change');
     },
 
     _getFirstRowColumnIndexForMajorDiagonalOn: function(rowIndex, colIndex) {
@@ -96,9 +96,9 @@
     _isInBounds: function(rowIndex, colIndex) {
       return (
         0 <= rowIndex &&
-        rowIndex < this.get("n") &&
+        rowIndex < this.get('n') &&
         0 <= colIndex &&
-        colIndex < this.get("n")
+        colIndex < this.get('n')
       );
     },
 
@@ -206,7 +206,7 @@
       // [0,0,0,1]        [0,0,0,1]
       // [0,0,0,0]        [0,0,0,0]
 
-      for (var i = 0; i < _size; i++, j++) {
+      for (var i = 0; j < _size; i++, j++) {
         if (_wholeBoard[i][j] === 1) {
           _piecesCount++;
         }
@@ -234,25 +234,55 @@
     // --------------------------------------------------------------
     //
     // test if a specific minor diagonal on this board contains a conflict
-    hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+    hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow, row = 0) {
       // get the whole board
       var _wholeBoard = this.rows();
-      var _size = this.attributes.n - 1;
+      var _size = this.attributes.n;
       var _piecesCount = 0;
       // a spot with index i,j on the board is referenced by wholeBoard[i][j]
       var j = minorDiagonalColumnIndexAtFirstRow;
-      for (var i = 0; i < _size; i++, j--) {
+      if (j > _size - 1) {
+        return 'Invalid input';
+      }
+      // we want to make sure we're not trying to access indexes off the board
+      for (var i = row; j > -1 && i < _size; i++, j--) {
         if (_wholeBoard[i][j] === 1) {
           _piecesCount++;
         }
       }
-      return (_piecesCount > 1);
+      return _piecesCount > 1;
+      // Example:
+      // [0,0,x,0]
+      // [0,0,0,0]
+      // [0,0,0,1]
+      // [0,0,0,0]
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      // run hasMinorDiagonalConflictAt run through first row
+      // that will cover right-top half of the board including the longest minor diagonal
+      // Example:
+      // [x,x,x,x] 0
+      // [x,x,x,0]
+      // [x,x,0,0] n-1
+      // [x,0,0,0] n
       var _size = this.attributes.n;
       var conflict = false;
+      for (var i = 0; i < _size; i++) {
+        // if there is a minor diagonal conlfict return true
+        if (this.hasMinorDiagonalConflictAt(i)) {
+          conflict = true;
+        }
+      }
+      //check the last column for minor diagonals starting at i = 1, j=_size-1 => i=_size-1
+      for (var i = 1; i < _size - 1; i++) {
+        var columnIdx = _size - 1;
+        if (this.hasMinorDiagonalConflictAt(columnIdx, i)) {
+          conflict = true;
+        }
+      }
+
       return conflict;
     }
 
