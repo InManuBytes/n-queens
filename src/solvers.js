@@ -16,7 +16,23 @@
 
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+  var solution = // board
+  var rooksLeft = n;
+  // create an empty board
+  // use toggle piece to place first piece
+  // put first piece on [0][0]
+  // [x - -]
+  // [- 0 0]
+  // [- 0 0]
+  // skip to next row
+  // [x 0 0]
+  // [0 x 0]
+  // [0 0 0]
+  // skip to next row
+  // [x 0 0]
+  // [0 x 0]
+  // [0 0 x]
+  // we need to be able to put n number of rooks
 
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
