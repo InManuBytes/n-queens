@@ -16,9 +16,20 @@
 
 
 window.findNRooksSolution = function(n) {
-  var solution = // board
+  var solution = new Board({n: n}); // create an empty board
   var rooksLeft = n;
-  // create an empty board
+  for (var i = 0; i < n; i++) {
+    var currentRow = solution.get(i); // check row by row
+    for (var j = 0; j < n; j++) {
+      if (currentRow[j] === 0) { // if there's no piece there we have to check for conflicts
+        solution.hasColConflictAt(j);
+        solution.togglePiece(i, j);
+        rooksLeft--;
+        break; //skip row
+      }
+    }
+  }
+
   // use toggle piece to place first piece
   // put first piece on [0][0]
   // [x - -]
