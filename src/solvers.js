@@ -15,36 +15,45 @@
 
 
 
-window.findNRooksSolution = function(n) {
-  var solution = new Board({n: n}); // create an empty board
+window.findNRooksSolution = function(n, firstPieceRow, firstPieceCol) {
+  var solutionBoard = new Board({n: n}); // create an empty board
+  debugger;
+  if (firstPieceCol && firstPieceRow) {
+    solutionBoard.togglePiece(firstPieceRow, firstPieceCol);
+  }
   var rooksLeft = n;
-  for (var i = 0; i < n; i++) {
-    var currentRow = solution.get(i); // check row by row
-    for (var j = 0; j < n; j++) {
+  for (var i = 0; i < n; i++) { // start on the first row
+    var currentRow = solutionBoard.get(i); // check row by row
+    for (let j = 0; j < n; j++) { // start on 0,0 and check each column
       if (currentRow[j] === 0) { // if there's no piece there we have to check for conflicts
-        solution.hasColConflictAt(j);
-        solution.togglePiece(i, j);
-        rooksLeft--;
-        break; //skip row
+        solutionBoard.togglePiece(i, j);
+        if (solutionBoard.hasColConflictAt(j) === true || solutionBoard.hasRowConflictAt(i)) { // no need to check for row conflicts since we're skipping rows
+          solutionBoard.togglePiece(i, j);
+        } else { // if we placed it
+          rooksLeft--;
+          //break; // get out of the column loop -> skip to next row
+        }
       }
     }
+    // if (rooksLeft === 0) {
+    //   break;
+    // }
   }
-
   // use toggle piece to place first piece
   // put first piece on [0][0]
   // [x - -]
   // [- 0 0]
   // [- 0 0]
   // skip to next row
-  // [x 0 0]
   // [0 x 0]
+  // [0 0 0]
   // [0 0 0]
   // skip to next row
   // [x 0 0]
   // [0 x 0]
   // [0 0 x]
   // we need to be able to put n number of rooks
-
+  var solution = solutionBoard.rows();
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
 };
@@ -52,7 +61,12 @@ window.findNRooksSolution = function(n) {
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
   var solutionCount = undefined; //fixme
+  // track starting position
+  // create new board
+    // loop through first row,
+      // call findNRooksSolution
 
+  window.findNRooksSolution(4,0,1);
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
 };
