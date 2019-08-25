@@ -11,8 +11,7 @@
 // take a look at solversSpec.js to see what the tests are expecting
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
-
-window.findNRooksSolution = _.memoize(function(n, i) {
+window.findNRooksSolution = _.memoize(function(n, i) { // we use memoize so it remembers the previous solution
   if (i === undefined) {
     i = 0;
   }
@@ -22,21 +21,19 @@ window.findNRooksSolution = _.memoize(function(n, i) {
   if (n === 1) {
     return [[1]];
   }
-  //console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return this._findNRooksSolution(this.findNRooksSolution(n - 1), i);
+  solution = this._findNRooksSolution(this.findNRooksSolution(n - 1), i);
+  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+  return solution;
 });
 
-// var fibonacci = _.memoize(function(n) {
-//   return n < 2 ? n: fibonacci(n - 1) + fibonacci(n - 2);
-// });
 
-window._findNRooksSolution = function(previousSolution, i) {
-  // [[1,0],[0,1]]
-  // return nxn+1 board with last column empty
-  // [[1,0],[0,1]]
+// This uses the previous solution or the solution for an n-1 board
+// so we can use it recursively as the previous function is super useful in this case
+window._findNRooksSolution = function(previousSolution, i) { // for n = 2 previous Solution = [[1]]
+
   var newSolution = previousSolution.slice();
   newSolution.forEach(function(row) {
-    row.push(0); // [[1,0,0],[0,1,0]]
+    row.push(0); // return nxn+1 board with last column empty // [[1,0]]
   });
   var _generateRowPiece = function(n) {
     // return a row with a piece toggled at the last column
@@ -47,14 +44,15 @@ window._findNRooksSolution = function(previousSolution, i) {
     row[row.length - 1] = 1; //flip the last one
     return row;
   };
-  var movableRow = _generateRowPiece(previousSolution.length + 1);
-  newSolution.splice(i, 0, movableRow);
-  // console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+  var movableRow = _generateRowPiece(previousSolution.length + 1); // [[0,1]]
+  newSolution.splice(i, 0, movableRow); // insert in our nxn+1 matrix at row i [[0,1],[1,0]] or [[1,0],[0,1]]
   return newSolution;
 };
 
-// return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
-window._allNRooksSolutions = function(n) {
+// See the following visualization for the thought behind this solution:
+// https://projects.invisionapp.com/freehand/document/EG3WZin5r
+// it does not use any of our helper functions and does not have to check non-working solutions
+window._allNRooksSolutions = function(n) { // n = 2
   if (n === 0) {
     return [];
   }
@@ -64,7 +62,7 @@ window._allNRooksSolutions = function(n) {
   var solutions = [];
   for (var i = 0; i < n; i++) {
     debugger;
-    _allNRooksSolutions(n - 1).forEach(function(solution) {
+    this._allNRooksSolutions(n - 1).forEach(function(solution) {
       // only one solution [[1]]
       solutions.push(this._findNRooksSolution(solution, i)); // pushes _findNRooksSolution([[1]],0) then _findNRooksSolution([[1]],1)
     });
@@ -72,6 +70,7 @@ window._allNRooksSolutions = function(n) {
   return solutions;
 };
 
+// return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
   var allSol = this._allNRooksSolutions(n);
   console.log('Number of solutions for ' + n + ' rooks:', allSol.length);
