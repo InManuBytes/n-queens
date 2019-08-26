@@ -11,7 +11,7 @@
 // take a look at solversSpec.js to see what the tests are expecting
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
-window.findNRooksSolution = _.memoize(function(n, i) {
+window.findNRooksSolution = _.memoize(function(n, i) { //O(n)
   // we use memoize so it remembers the previous solution
   if (i === undefined) {
     i = 0;
@@ -29,13 +29,13 @@ window.findNRooksSolution = _.memoize(function(n, i) {
 
 // This uses the previous solution or the solution for an n-1 board
 // so we can use it recursively as the previous function is super useful in this case
-window._findNRooksSolution = function(previousSolution, i) {
+window._findNRooksSolution = function(previousSolution, i) { //O(n)
   // for n = 2 previous Solution = [[1]]
   var newSolution = previousSolution.slice();
-  newSolution.forEach(function(row) {
+  newSolution.forEach(function(row) { //O(n)
     row.push(0); // return nxn+1 board with last column empty // [[1,0]]
   });
-  var _generateRowPiece = function(n) {
+  var _generateRowPiece = function(n) { //O(n)
     // return a row with a piece toggled at the last column
     var row = [];
     for (var i = 0; i < n; i++) {
@@ -53,7 +53,7 @@ window._findNRooksSolution = function(previousSolution, i) {
 // https://projects.invisionapp.com/freehand/document/EG3WZin5r
 // it does not use any of our helper functions and does not have to check non-working solutions
 // we can do this because of the fact that the count should be n!
-window._allNRooksSolutions = function(n) {
+window._allNRooksSolutions = function(n) { //O(n!)
   // n = 2
   if (n === 0) {
     return [];
@@ -71,18 +71,8 @@ window._allNRooksSolutions = function(n) {
   return solutions;
 };
 
-var _generateRowPiece = function (n) {
-  // return a row with a piece toggled at the last column
-  var row = [];
-  for (var i = 0; i < n; i++) {
-    row.push(0);
-  }
-  row[row.length - 1] = 1; //flip the last one
-  return row;
-};
-
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
-window.countNRooksSolutions = function(n) {
+window.countNRooksSolutions = function(n) { //O(n!)
   var allSol = this._allNRooksSolutions(n);
   console.log('Number of solutions for ' + n + ' rooks:', allSol.length);
   return allSol.length;
@@ -108,7 +98,7 @@ window.countNRooksSolutions = function(n) {
 // [x Q x ] once you place one queen the only two spaces left are on the same row
 // [x x x ]
 // [0 - 0 ]
-window.findNQueensSolution = function(n) {
+window.findNQueensSolution = function(n) { //O(n!)
   var solutionBoard = new Board({ n: n });
   var solution = solutionBoard.rows();
   // first we generate a 1D array of length n with n integers
@@ -150,7 +140,7 @@ window.findNQueensSolution = function(n) {
 // generate a board from the permutations
 // and check for queen conflicts on that board
 // if there are none we increase the count
-window.countNQueensSolutions = function(n) {
+window.countNQueensSolutions = function(n) { //O(n!)
   debugger;
   var solutionCount = (!n) ? 1 : 0;
   // first we generate a 1D array of length n with n integers
@@ -159,12 +149,12 @@ window.countNQueensSolutions = function(n) {
     oneDArray.push(i);
   }
   // then we get all the permutations and loop over them
-  this._getAllNumberPermutations(oneDArray).forEach(function(permutation) {
+  this._getAllNumberPermutations(oneDArray).forEach(function(permutation) { //O(n)
     // generate a board from each permutation
-    var board = _getBoard(permutation);
+    var board = _getBoard(permutation); //O(n!)
     // check if it has queens conflict
     // and grab the first that doesn't
-    if (!board.hasAnyQueensConflicts()) {
+    if (!board.hasAnyQueensConflicts()) { //O(n^2)
       solutionCount++;
     }
   });
@@ -181,7 +171,7 @@ window.countNQueensSolutions = function(n) {
 // choosing each one
 // then recursively call the permutations on the rest of the array
 // this is similar to what we did _allNRooksSolutions
-var _getAllNumberPermutations = function(numbersArray) {
+var _getAllNumberPermutations = function(numbersArray) { //O(n!)
   // [0,1]
   var perms = [];
   // base case is when there's only one number left in the array
@@ -204,7 +194,7 @@ var _getAllNumberPermutations = function(numbersArray) {
 };
 
 //function to generate a board given a one dimensional array
-window._getBoard = function(permutation) {
+window._getBoard = function(permutation) { // O(n)
   //[2,0,3,1] where the numbers represent the column at each row
   // we loop over the array and we know that the index is the rowIdx and the element is the columnIdx
   var n = permutation.length;
