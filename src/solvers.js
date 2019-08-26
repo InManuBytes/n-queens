@@ -23,7 +23,7 @@ window.findNRooksSolution = _.memoize(function(n, i) {
     return [[1]];
   }
   solution = this._findNRooksSolution(this.findNRooksSolution(n - 1), i);
-  console.log("Single solution for " + n + " rooks:", JSON.stringify(solution));
+  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
 });
 
@@ -31,13 +31,6 @@ window.findNRooksSolution = _.memoize(function(n, i) {
 // so we can use it recursively as the previous function is super useful in this case
 window._findNRooksSolution = function(previousSolution, i) {
   // for n = 2 previous Solution = [[1]]
-
-<<<<<<< HEAD
-window.findNRooksSolution = _.memoize(function(n, i) {
-  if (i === undefined) {
-    i = 0;
-  }
-=======
   var newSolution = previousSolution.slice();
   newSolution.forEach(function(row) {
     row.push(0); // return nxn+1 board with last column empty // [[1,0]]
@@ -62,43 +55,10 @@ window.findNRooksSolution = _.memoize(function(n, i) {
 // we can do this because of the fact that the count should be n!
 window._allNRooksSolutions = function(n) {
   // n = 2
->>>>>>> study
   if (n === 0) {
     return [];
   }
   if (n === 1) {
-<<<<<<< HEAD
-    return [[1]];
-  }
-  debugger;
-  //console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return _findNRooksSolution(this.findNRooksSolution(n - 1), i);
-});
-
-// var fibonacci = _.memoize(function(n) {
-//   return n < 2 ? n: fibonacci(n - 1) + fibonacci(n - 2);
-// });
-
-
-
-_findNRooksSolution = function(previousSolution, i) {
-  // [[1,0],[0,1]]
-  var solution = _generateNByNplus1(previousSolution);
-  var movableRow = _generateRowPiece(solution.length + 1);
-  solution.splice(i, 0, movableRow);
-  // console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution;
-};
-
-var _generateNByNplus1 = function (solution) {
-  // return nxn+1 board with last column empty
-  // [[1,0],[0,1]]
-  solution.forEach(function(row) {
-    var index = row.length;
-    row[index] = 0; // [[1,0,0],[0,1,0]]
-  });
-  return solution;
-=======
     return [[[1]]];
   }
   var solutions = [];
@@ -109,7 +69,6 @@ var _generateNByNplus1 = function (solution) {
     });
   }
   return solutions;
->>>>>>> study
 };
 
 var _generateRowPiece = function (n) {
@@ -124,20 +83,9 @@ var _generateRowPiece = function (n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-<<<<<<< HEAD
-  // var solutionCount = 0;
-  var solutions = [];
-  debugger;
-  for (var i = 0; i < n; i++) {
-    solutions.push(this.findNRooksSolution(n, i));
-  }
-  console.log('Number of solutions for ' + n + ' rooks:', solutions.length);
-  return solutions;
-=======
   var allSol = this._allNRooksSolutions(n);
-  console.log("Number of solutions for " + n + " rooks:", allSol.length);
+  console.log('Number of solutions for ' + n + ' rooks:', allSol.length);
   return allSol.length;
->>>>>>> study
 };
 
 
@@ -181,7 +129,7 @@ window.findNQueensSolution = function(n) {
     });
   }
   console.log(
-    "Single solution for " + n + " queens:",
+    'Single solution for ' + n + ' queens:',
     JSON.stringify(solution)
   );
   return solution;
@@ -220,7 +168,7 @@ window.countNQueensSolutions = function(n) {
       solutionCount++;
     }
   });
-  console.log("Number of solutions for " + n + " queens:", solutionCount);
+  console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
 };
 
